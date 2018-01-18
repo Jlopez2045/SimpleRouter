@@ -41,8 +41,7 @@ class Route
      * @param string $path          Route URI path to match
      * @param callable $callback    Callable callback method to execute on route match
     */
-	public function __construct($path, $callback)
-	{
+	public function __construct($path, $callback){
 		$this->setPath($path);
 		$this->setCallback($callback);
 	}
@@ -55,20 +54,18 @@ class Route
 		return $this->path;
 	}
 
-	public function setCallback($callback)
-    {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('Expected a callable. Got an uncallable '. gettype($callback));
-        }
+	public function setCallback($callback){
+		if (!is_callable($callback)) {
+		    throw new InvalidArgumentException('Expected a callable. Got an uncallable '. gettype($callback));
+		}
 
-        $this->callback = $callback;
+		$this->callback = $callback;
 
-        return $this;
-    }
+		return $this;
+    	}
 
 	public function getCallback(){
 		return $this->callback;
 	}
 }
-
 ?>
