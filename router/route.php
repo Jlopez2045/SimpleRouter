@@ -7,7 +7,7 @@
  */
 class Route
 {
-	/**
+    /**
      * Properties
      */
 
@@ -21,7 +21,7 @@ class Route
      */
 	protected $callback;
 
-	/**
+    /**
      * The URL path to match
      *
      * Allows for regular expression matching and/or basic string matching
@@ -35,12 +35,12 @@ class Route
      */
 	protected $path;
 
-	/**
-     * Build a Route instance
-     *
-     * @param string $path          Route URI path to match
-     * @param callable $callback    Callable callback method to execute on route match
-    */
+      /**
+       * Build a Route instance
+       *
+       * @param string $path          Route URI path to match
+       * @param callable $callback    Callable callback method to execute on route match
+       */
 	public function __construct($path, $callback){
 		$this->setPath($path);
 		$this->setCallback($callback);
