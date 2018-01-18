@@ -63,8 +63,7 @@ class Router
 	 * @param callback $callback The callback method to execute when the route is matched
 	 */
 	public function map($uri_patern_path, $callback){
-		$route = new Route($uri_patern_path, $callback);
-		$this->routes[] = $route;
+		$this->routes[] = new Route($uri_patern_path, $callback);
 	}
 
 	public function respond(){
