@@ -4,8 +4,6 @@ use router\Exceptions\RouteNotFoundException;*/
 require_once 'route.php';
 require_once 'Exceptions/RouteNotFoundException.php';
 
-
-
 /**
 * 
 */
@@ -14,42 +12,14 @@ class Router
 	/**
      * Class properties
      */
-	/**
-     * The types to detect in a defined match "block"
-     *
-     * Examples of these blocks are as follows:
-     *
-     * - integer:       '[i:id]'
-     * - alphanumeric:  '[a:username]'
-     * - hexadecimal:   '[h:color]'
-     * - slug:          '[s:article]'
-     *
-     * @type array
-     */
-
-	/**
-	 * @var array Array of default match types (regex helpers)
-	 * *                    // Match all request URIs
-	 * [i]                  // Match an integer 
-	 * [i:id]               // Match an integer as 'id' - '[i:id]'
-	 * [a:action]           // Match alphanumeric characters as 'action'
-	 * [h:key]              // Match hexadecimal characters as 'key'
-	 * [s:slug]             // Match alphanumeric characters as 'slug'
-	 * [:action]            // Match anything up to the next / or end of the URI as 'action'
-	 * [create|edit:action] // Match either 'create' or 'edit' as 'action'
-	 * [*]                  // Catch all (lazy, stops at the next trailing slash)
-	 * [*:trailing]         // Catch all as 'trailing' (lazy)
-	 * [**:trailing]        // Catch all (possessive - will match the rest of the URI)
-	 * .[:format]?          // Match an optional parameter 'format' - a / or . before the block is also optional
-	*/
 	protected $match_types = array(
-		'i'  => '[0-9]++',
-		'a'  => '[0-9A-Za-z]++',
-		'h'  => '[0-9A-Fa-f]++',
-		's'  => '[0-9A-Za-z-_]++',
+		'i'  => '[0-9]+',
+		'a'  => '[0-9A-Za-z]+',
+		'h'  => '[0-9A-Fa-f]+',
+		's'  => '[0-9A-Za-z-_]+',
 		'*'  => '.+?',
-		'**' => '.++',
-		''   => '[^/\.]++'
+		'**' => '.+',
+		''   => '[^/\.]+'
 	);
 
 
@@ -89,8 +59,8 @@ class Router
      * @return boolean
      */
 	public function matches(Route $route){
-		$uri = strtolower(filter_var(strip_tags($_SERVER['REQUEST_URI']), FILTER_SANITIZE_URL));
-	    if (preg_match('~' . $this->parseUriParameters($route->getPath()) . '~', $uri, $this->matches)) {
+		$uri = filter_var(strip_tags($_SERVER['REQUEST_URI']), FILTER_SANITIZE_URL);
+	    if (preg_match('#' . $this->parseUriParameters($route->getPath()) . '$#i', $uri, $this->matches)) {
 	        return true;
 	    }
 	   	return false;
@@ -105,7 +75,7 @@ class Router
 	public function parseUriParameters($path_patern){
 		//extract text between square brackets '[]' and separated by ':' [type:parameter]
 		//if (preg_match_all('`\[([^:\]]*+)(?::([^:\]]*+))?\]`', $path_patern, $matches, PREG_SET_ORDER)) {
-		preg_match_all('`\[([^:\]]*+)(?::([^:\]]*+))?\]`', $path_patern, $matches, PREG_SET_ORDER);
+		preg_match_all('#\[([^:\]]*+)(?::([^:\]]*+))?\]#', $path_patern, $matches, PREG_SET_ORDER);
 			//transform uri patern "article/[a:articleid]/post/[s:slug]"
 			//to the new regex uri patern "article/([0-9A-Za-z]++)/post/([0-9A-Za-z-_]++)"
 			$new_uri_path=$path_patern;
