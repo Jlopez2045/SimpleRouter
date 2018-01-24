@@ -60,10 +60,10 @@ class Router
      */
 	public function matches(Route $route){
 		$uri = filter_var(strip_tags($_SERVER['REQUEST_URI']), FILTER_SANITIZE_URL);
-	    if (preg_match('#' . $this->parseUriParameters($route->getPath()) . '$#i', $uri, $this->matches)) {
-	        return true;
-	    }
-	   	return false;
+		if (preg_match('#' . $this->parseUriParameters($route->getPath()) . '$#i', $uri, $this->matches)) {
+	        	return true;
+		}
+		return false;
 	}
 
 	/**
