@@ -1,5 +1,9 @@
 <?php
+/*namespace router;
+use router\Exceptions\RouteNotFoundException;*/
 require_once 'route.php';
+require_once 'Exceptions/RouteNotFoundException.php';
+
 
 
 /**
@@ -56,6 +60,8 @@ class Router
      */
 	protected $routes = array();
 
+	protected $matches;
+
 	/**
 	 * Map a route
 	 *
@@ -69,11 +75,25 @@ class Router
 	public function respond(){
 		$uri = strtolower(filter_var(strip_tags($_SERVER['REQUEST_URI']), FILTER_SANITIZE_URL));
 		foreach ($this->routes as $route) {
-			if (preg_match('~' . $this->parseUriParameters($route->getPath()) . '~', $uri, $matches)) {
-				call_user_func_array($route->getCallback(), $matches);
-				die();
+			if ($this->matches($route)) {
+				return $route->executeCallback($this->matches);
+				//die();
 			}
 		}
+		throw new RouteNotFoundException("No routes matching the requested URI ''{$_SERVER['REQUEST_URI']}''");
+	}
+	/**
+     * See if the requested URI matches with a route
+     *
+     * @param Route $route
+     * @return boolean
+     */
+	public function matches(Route $route){
+		$uri = strtolower(filter_var(strip_tags($_SERVER['REQUEST_URI']), FILTER_SANITIZE_URL));
+	    if (preg_match('~' . $this->parseUriParameters($route->getPath()) . '~', $uri, $this->matches)) {
+	        return true;
+	    }
+	   	return false;
 	}
 
 	/**
@@ -84,14 +104,17 @@ class Router
 	 */
 	public function parseUriParameters($path_patern){
 		//extract text between square brackets '[]' and separated by ':' [type:parameter]
-		if (preg_match_all('`\[([^:\]]*+)(?::([^:\]]*+))?\]`', $path_patern, $matches, PREG_SET_ORDER)) {
+		//if (preg_match_all('`\[([^:\]]*+)(?::([^:\]]*+))?\]`', $path_patern, $matches, PREG_SET_ORDER)) {
+		preg_match_all('`\[([^:\]]*+)(?::([^:\]]*+))?\]`', $path_patern, $matches, PREG_SET_ORDER);
+			//transform uri patern "article/[a:articleid]/post/[s:slug]"
+			//to the new regex uri patern "article/([0-9A-Za-z]++)/post/([0-9A-Za-z-_]++)"
 			$new_uri_path=$path_patern;
 			foreach($matches as $index) {
 				list($block, $type, $parameter) = $index;
 				$new_uri_path = str_replace($block, "(" . $this->match_types[$type] . ")", $new_uri_path);
 			}
 			return $new_uri_path;
-		}
+		//}
 	}
 }
 ?>

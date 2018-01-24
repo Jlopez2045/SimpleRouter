@@ -46,6 +46,16 @@ class Route
 		$this->setCallback($callback);
 	}
 
+    /**
+     * Execute the callback.
+     * The matches function needs to be called before this and return true.
+     * We don't take the first match since it's the whole path
+     */
+    public function executeCallback($matches)
+    {
+        return call_user_func_array($this->callback, $matches);
+    }
+
 	public function setPath($path){
 		$this->path=$path;
 	}
