@@ -1,12 +1,12 @@
 <?php 
 require_once 'router/router.php';
 //require_once 'user.php';
-$router = new Router("/SimpleRouter");
+$router = new Router();
 
 $router->map(
 	"/",
 	 function(){
-	 	require 'app/views/home.php';
+	 	//require 'app/views/home.php';
 });
 
 $router->map(
@@ -24,7 +24,7 @@ $router->map(
 $router->map(
 	"/Products",
 	 function(){
-	 	require_once 'app/views/product.php';
+	 	//require_once 'app/views/product.php';
 });
 
 $router->map(
@@ -38,6 +38,12 @@ $router->map(
 	 function($year, $month){
 	 	echo 'post from date: ' . $year . '/' . $month;
 });
+
+$router->map("/redirect", function(){
+	if(isset($_GET['url'])){
+		Router::redirect($_GET['url']);
+	}
+});
 /*
 $router->map(
 	"/user/[a:userid]/[a:username]",
@@ -45,5 +51,5 @@ $router->map(
 );*/
 $router->respond();
 
-$router->getRoutes();
+$router->getRoutes("printr");
 ?>

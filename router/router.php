@@ -104,7 +104,14 @@ class Router
 		}
 		return $new_uri_path;
 	}
-
+	
+	public function redirect($url){
+		if (filter_var($url, FILTER_VALIDATE_URL)) {
+			header('Location: ' . $url);
+			exit;
+		} 
+	}
+	
 	public function getRoutes($type = "path"){
         switch ($type) {
         	case 'path':
