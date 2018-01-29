@@ -1,20 +1,49 @@
 <?php 
 require_once 'router/router.php';
+//require_once 'user.php';
+$router = new Router("/SimpleRouter");
 
-$router = new Router;
-
-$router->map("/home", function(){
-	echo "Homepage";
+$router->map(
+	"/",
+	 function(){
+	 	require 'app/views/home.php';
 });
 
-$router->map("/article/[a:articleid]/post/[s:slug]", function($request, $articleid, $slug){
-	echo "Article ID: $articleid, Slug of the Article: $slug";
+$router->map(
+	"/About",
+	 function(){
+	 	echo "About";
 });
 
-$router->map("/post/[i:year]/[i:month]", function($request, $year, $month){
-	echo 'post from date: ' . $year . '/' . $month;
+$router->map(
+	"/Contact",
+	 function(){
+	 	echo "Contact";
 });
 
+$router->map(
+	"/Products",
+	 function(){
+	 	require_once 'app/views/product.php';
+});
+
+$router->map(
+	"/article/[a:articleid]/post/[s:slug]",
+	 function($articleid, $slug){
+	 	echo "Article ID: $articleid, Slug of the Article: $slug";
+});
+
+$router->map(
+	"/post/[i:year]/[i:month]",
+	 function($year, $month){
+	 	echo 'post from date: ' . $year . '/' . $month;
+});
+/*
+$router->map(
+	"/user/[a:userid]/[a:username]",
+	'User::show'
+);*/
 $router->respond();
 
+$router->getRoutes();
 ?>

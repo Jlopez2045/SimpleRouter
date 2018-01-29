@@ -68,11 +68,9 @@ class Route
 		if (!is_callable($callback)) {
 		    throw new InvalidArgumentException('Expected a callable. Got an uncallable '. gettype($callback));
 		}
-
 		$this->callback = $callback;
-
 		return $this;
-    	}
+    }
 
 	public function getCallback(){
 		return $this->callback;
