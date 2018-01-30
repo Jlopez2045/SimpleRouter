@@ -6,6 +6,7 @@ $router = new Router();
 $router->map(
 	"/",
 	 function(){
+		 echo "Homepage";
 	 	//require 'app/views/home.php';
 });
 
